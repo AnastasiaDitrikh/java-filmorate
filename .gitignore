@@ -2,7 +2,7 @@
 *.log
 *.jar
 *.war
-
+*.mvn
 *.DS_Store
 *.checkstyle.xml
 *.nar
