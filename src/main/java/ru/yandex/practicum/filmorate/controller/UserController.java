@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +14,10 @@ import java.util.*;
 @RequestMapping("/users")
 @RestController
 @Slf4j
-@Data
 public class UserController {
 
-    protected final Map<Integer, User> users = new HashMap<>();
-    protected Integer idUserGen = 1;
+    protected final Map<Long, User> users = new HashMap<>();
+    protected Long idUserGen = 1L;
 
 
     @GetMapping
@@ -30,11 +28,7 @@ public class UserController {
     @PostMapping
     public User add(@RequestBody User user) { //
         validateUser(user);
-        for (User value : users.values()) {
-            if (user.getLogin().equals(value.getLogin())) {
-                throw new ValidationException("Пользователь с таким логином зарегистрирован");
-            }
-        }
+        checkUserLogin(user);
         user.setId(idUserGen);
         users.put(idUserGen, user);
         idUserGen++;
@@ -46,6 +40,7 @@ public class UserController {
     public User update(@RequestBody User user) {
         validateUser(user);
         if (users.containsKey(user.getId())) {
+            checkUserLogin(user);
             users.put(user.getId(), user);
             log.info("Пользователь с id = {} успешно обновлен", user.getId());
         } else {
@@ -55,9 +50,17 @@ public class UserController {
         return user;
     }
 
-    public static void validateUser(User user) throws ValidationException {
+    private void checkUserLogin(User user) {
+        for (User value : users.values()) {
+            if (user.getLogin().equals(value.getLogin())) {
+                throw new ValidationException("Пользователь с таким логином зарегистрирован");
+            }
+        }
+    }
+
+    public static void validateUser(User user) {
         String mail = user.getEmail();
-        if (mail == null || mail.isEmpty() || mail.isBlank()) {
+        if (mail == null || mail.isBlank()) {
             log.warn("Пользователь с id = {} не указал электронную почту", user.getId());
             throw new ValidationException("Электронная почта не указана");
         } else if (!mail.contains("@")) {
@@ -66,10 +69,10 @@ public class UserController {
         } else if (user.getLogin() == null || user.getLogin().contains(" ") || user.getLogin().isBlank()) {
             log.warn("Пользователь с id = {} не указал логин", user.getId());
             throw new ValidationException("Поле логин не может быть пустым или содержать пробелы");
-        } else if (user.getName() == null || user.getName().isBlank() || user.getName().isEmpty()) {
+        } else if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
             log.info("В качестве имени пользователя с id = {} будет использоваться логин", user.getId());
-        } else if (user.getBirthday().isAfter(LocalDate.now())) {
+        } else if (user.getBirthday() == null || user.getBirthday().isAfter(LocalDate.now())) {
             log.warn("Пользователь с id = {} некорректно указал дату рождения", user.getId());
             throw new ValidationException("Неккоректно введена дата рождения");
         }

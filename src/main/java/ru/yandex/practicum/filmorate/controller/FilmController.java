@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -15,13 +14,11 @@ import java.util.Map;
 @RequestMapping("/films")
 @RestController
 @Slf4j
-@Data
-
-
 public class FilmController {
 
-    protected final Map<Integer, Film> films = new HashMap<>();
-    protected Integer idFilmGen=1;
+    private static final LocalDate THE_FIRST_FILM_REALISE_DATE = LocalDate.of(1895, 12, 28);
+    protected final Map<Long, Film> films = new HashMap<>();
+    protected Long idFilmGen = 1L;
 
     @GetMapping
     public List<Film> findAll() {
@@ -33,7 +30,7 @@ public class FilmController {
         validateFilm(film);
         film.setId(idFilmGen);
         films.put(film.getId(), film);
-        idFilmGen+=1;
+        idFilmGen += 1;
         log.info("Фильм с id = {} успешно добален", film.getId());
         return film;
     }
@@ -41,24 +38,24 @@ public class FilmController {
     @PutMapping
     public Film update(@RequestBody Film film) {
         validateFilm(film);
-        Integer idFilm = film.getId();
+        Long idFilm = film.getId();
         if (films.containsKey(idFilm)) {
             films.put(idFilm, film);
             log.warn("Фильм с id = {} успешно обновлен", film.getId());
         } else {
-            throw new ValidationException("Неозможно обновить фильм, т.к. фильма с таким нет");
+            throw new ValidationException("Невозможно обновить фильм, т.к. фильма с таким нет");
         }
         return film;
     }
 
-    public static void validateFilm(Film film) throws ValidationException{
-        if (film.getName()==null || film.getName().isEmpty() || film.getName().isBlank()) {
+    public static void validateFilm(Film film) {
+        if (film.getName() == null || film.getName().isBlank()) {
             log.warn("В фильме с id = {} отсутствует название", film.getId());
             throw new ValidationException("Название фильма не может быть пустым или состоять из пробелов");
-        } else if (film.getDescription().length() > 200) {
+        } else if (film.getDescription()==null || film.getDescription().length() > 200) {
             log.warn("В фильме с id = {} превышение длины описания", film.getId());
             throw new ValidationException("Длина описания фильма не должна превышать 200 символов");
-        } else if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+        } else if (film.getReleaseDate()==null || film.getReleaseDate().isBefore(THE_FIRST_FILM_REALISE_DATE)) {
             log.warn("В фильме с id = {} некорректная дата релиза", film.getId());
             throw new ValidationException("Некорректная дата релиза");
         } else if (film.getDuration() <= 0) {
@@ -67,5 +64,4 @@ public class FilmController {
         }
         log.info("Валидация фильма с id = {} прошла успешно", film.getId());
     }
-
 }

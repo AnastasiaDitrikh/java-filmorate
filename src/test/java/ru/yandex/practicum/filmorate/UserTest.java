@@ -16,7 +16,7 @@ class UserTest {
     @BeforeEach
     public void prepareData() {
         userTestObject = User.builder()
-                .id(1)
+                .id(1L)
                 .email("poligraphsharikov@gmail.com")
                 .login("polsha")
                 .birthday(LocalDate.of(2011, 3, 28))

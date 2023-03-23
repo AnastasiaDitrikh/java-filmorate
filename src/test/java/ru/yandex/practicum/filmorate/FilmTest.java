@@ -16,7 +16,7 @@ class FilmTest {
     @BeforeEach
     public void prepareData() {
         filmTestObject = Film.builder()
-                .id(1)
+                .id(1L)
                 .name("самый лучший фильм")
                 .description("Слишком много фильмов нравится, сложно выбрать что-то для примера")
                 .releaseDate(LocalDate.of(2011, 3, 28))
