@@ -1,7 +1,13 @@
+mvnw
+HELP.md
+mvnw.cmd
 *.class
 *.log
 *.jar
 *.war
+*.mvn
+*.DS_Store
+*.checkstyle.xml
 *.nar
 *.ear
 *.zip
