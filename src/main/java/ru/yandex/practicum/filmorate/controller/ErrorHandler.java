@@ -16,20 +16,20 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
         log.error("Данные не обнаружены.");
-        return new ErrorResponse("Данные не обнаружены." , e.getMessage());
+        return new ErrorResponse("Данные не обнаружены.", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
         log.error("Ошибка валидации.");
-        return new ErrorResponse("Ошибка валидации." , e.getMessage());
+        return new ErrorResponse("Ошибка валидации.", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowableException(final Throwable e) {
         log.error("Непредвиденная ошибка.");
-        return new ErrorResponse("Непредвиденная ошибка." , e.getMessage());
+        return new ErrorResponse("Непредвиденная ошибка.", e.getMessage());
     }
 }
