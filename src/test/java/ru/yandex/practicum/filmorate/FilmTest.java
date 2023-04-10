@@ -2,9 +2,9 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.ValidatorFilm;
 
 import java.time.LocalDate;
 
@@ -27,15 +27,15 @@ class FilmTest {
     @Test
     public void nameValidateTest() {
         filmTestObject.setName("");
-        Exception exceptionNullName = assertThrows(ValidationException.class, () -> FilmController.validateFilm(filmTestObject));
+        Exception exceptionNullName = assertThrows(ValidationException.class, () -> ValidatorFilm.validateFilm(filmTestObject));
         assertEquals("Название фильма не может быть пустым или состоять из пробелов", exceptionNullName.getMessage());
 
         filmTestObject.setName("");
-        Exception exceptionEmptyName = assertThrows(ValidationException.class, () -> FilmController.validateFilm(filmTestObject));
+        Exception exceptionEmptyName = assertThrows(ValidationException.class, () -> ValidatorFilm.validateFilm(filmTestObject));
         assertEquals("Название фильма не может быть пустым или состоять из пробелов", exceptionEmptyName.getMessage());
 
         filmTestObject.setName("   ");
-        Exception exceptionNameFromSpaces = assertThrows(ValidationException.class, () -> FilmController.validateFilm(filmTestObject));
+        Exception exceptionNameFromSpaces = assertThrows(ValidationException.class, () -> ValidatorFilm.validateFilm(filmTestObject));
         assertEquals("Название фильма не может быть пустым или состоять из пробелов", exceptionNameFromSpaces.getMessage());
     }
 
@@ -48,14 +48,15 @@ class FilmTest {
                 "о собственном модном магазине, но на их пути были всевозможные препятствия. " +
                 "Все они выбирают неочевидные пути достижения своих целей, и мечты по-прежнему " +
                 "остаются недостижимыми, а жизни героев рушатся безвозвратно");
-        Exception exceptionTooLongDescription = assertThrows(ValidationException.class, () -> FilmController.validateFilm(filmTestObject));
+        Exception exceptionTooLongDescription = assertThrows(ValidationException.class, () -> ValidatorFilm.validateFilm(filmTestObject));
         assertEquals("Длина описания фильма не должна превышать 200 символов",
                 exceptionTooLongDescription.getMessage());
     }
+
     @Test
     public void durationValidateTest() {
         filmTestObject.setDuration(-120);
-        Exception exceptionNegativeDuration = assertThrows(ValidationException.class, () -> FilmController.validateFilm(filmTestObject));
+        Exception exceptionNegativeDuration = assertThrows(ValidationException.class, () -> ValidatorFilm.validateFilm(filmTestObject));
         assertEquals("Продолжительность фильма не может быть отрицательной",
                 exceptionNegativeDuration.getMessage());
     }
@@ -63,14 +64,14 @@ class FilmTest {
     @Test
     public void durationReleaseDateTest() {
         filmTestObject.setReleaseDate(LocalDate.of(1895, 12, 27));
-        Exception exceptionReleaseDate = assertThrows(ValidationException.class, () -> FilmController.validateFilm(filmTestObject));
+        Exception exceptionReleaseDate = assertThrows(ValidationException.class, () -> ValidatorFilm.validateFilm(filmTestObject));
         assertEquals("Некорректная дата релиза",
                 exceptionReleaseDate.getMessage());
     }
 
     @Test
     public void successfulValidateFilmTest() {
-        assertDoesNotThrow(() -> FilmController.validateFilm(filmTestObject));
+        assertDoesNotThrow(() -> ValidatorFilm.validateFilm(filmTestObject));
     }
 
 }
