@@ -6,10 +6,7 @@ import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -37,6 +34,8 @@ public class InMemoryUserStorage implements UserStorage {
     public User update(User user) {
         ValidatorUser.validateUser(user);
         if (users.containsKey(user.getId())) {
+            users.remove(user.getId());
+            checkUserLogin(user);
             users.put(user.getId(), user);
             log.info("Пользователь с id = {} успешно обновлен", user.getId());
         } else {
@@ -47,11 +46,8 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUserById(Long userId) {
-        if (!users.containsKey(userId)) {
-            throw new NotFoundException("Пользователя с id = " + userId + " нет.");
-        }
-        return users.get(userId);
+    public Optional<User> getUserById(Long userId) {
+        return Optional.ofNullable(users.get(userId));
     }
 
     private void checkUserLogin(User user) {

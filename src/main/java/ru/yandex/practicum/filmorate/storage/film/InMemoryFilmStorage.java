@@ -5,13 +5,11 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
+
 public class InMemoryFilmStorage implements FilmStorage {
 
     protected final Map<Long, Film> films = new HashMap<>();
@@ -47,10 +45,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film getFilmById(Long filmId) {
-        if (!films.containsKey(filmId)) {
-            throw new NotFoundException("Фильма с id = " + filmId + " нет.");
-        }
-        return films.get(filmId);
+    public Optional<Film> getFilmById(Long filmId) {
+        return Optional.ofNullable(films.get(filmId));
     }
 }
