@@ -5,10 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class FilmServiceImpl implements FilmService {
 
     private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
 
     @Override
     public List<Film> findAll() {
@@ -43,15 +47,16 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public Film addLike(Long userId, Long filmId) {
-        Film film = getFilmById(filmId);
+    public Film addLike(Long filmId, Long userId) {
+        Film film = this.getFilmById(filmId);
+        Optional<User> user = userStorage.getUserById(userId);
         film.getLikes().add(userId);
         log.info("Like к фильму с id = {} успешно добален", filmId);
         return film;
     }
 
     @Override
-    public void deleteLike(Long userId, Long filmId) {
+    public void deleteLike(Long filmId, Long userId) {
         Film film = getFilmById(filmId);
         if (!film.getLikes().contains(userId)) {
             log.info("Like к фильму с id = {} , от пользователя id={} не существует", filmId, userId);
@@ -63,9 +68,17 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public List<Film> getTheMostPopularMovies(int count) {
+        Collection<Film> allFilms = filmStorage.findAll();
+        return allFilms.stream()
+                .sorted(((o1, o2) -> o2.getLikes().size() - o1.getLikes().size()))
+                .limit(count)
+                .collect(Collectors.toList());
+    }
+
+/*    @Override
+    public List<Film> getTheMostPopularMovies(int count) {
         LikesComparator likesComparator = new LikesComparator();
         return filmStorage.findAll().stream()
-                .filter(i -> count > 0)
                 .sorted(likesComparator)
                 .limit(count)
                 .collect(Collectors.toList());
@@ -76,5 +89,8 @@ public class FilmServiceImpl implements FilmService {
         public int compare(Film o1, Film o2) {
             return o1.getLikes().size() - o2.getLikes().size();
         }
-    }
+    }*/
 }
+
+
+

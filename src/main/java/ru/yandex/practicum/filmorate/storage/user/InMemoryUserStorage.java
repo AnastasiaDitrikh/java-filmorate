@@ -22,7 +22,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User add(User user) {
         ValidatorUser.validateUser(user);
-        checkUserLogin(user);
+        checkUserLogin(users, user);
         user.setId(idUserGen);
         users.put(idUserGen, user);
         idUserGen++;
@@ -34,10 +34,14 @@ public class InMemoryUserStorage implements UserStorage {
     public User update(User user) {
         ValidatorUser.validateUser(user);
         if (users.containsKey(user.getId())) {
-            users.remove(user.getId());
-            checkUserLogin(user);
-            users.put(user.getId(), user);
-            log.info("Пользователь с id = {} успешно обновлен", user.getId());
+            if (users.get(user.getId()).getLogin().equals(user.getLogin())) {
+                users.put(user.getId(), user);
+                log.info("Пользователь с id = {} успешно обновлен", user.getId());
+            } else {
+                checkUserLogin(users, user);
+                users.put(user.getId(), user);
+                log.info("Пользователь с id = {} успешно обновлен", user.getId());
+            }
         } else {
             log.warn("Пользователь с id {} не обновлен, т.к. не зарегистрирован", user.getId());
             throw new NotFoundException("Невозможно обновить данные пользователя. Такого пользователя не существует");
@@ -45,16 +49,16 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    @Override
-    public Optional<User> getUserById(Long userId) {
-        return Optional.ofNullable(users.get(userId));
-    }
-
-    private void checkUserLogin(User user) {
+    private void checkUserLogin(Map<Long, User> users, User user) {
         for (User value : users.values()) {
             if (user.getLogin().equals(value.getLogin())) {
                 throw new ValidationException("Пользователь с таким логином зарегистрирован");
             }
         }
+    }
+
+    @Override
+    public Optional<User> getUserById(Long userId) {
+        return Optional.ofNullable(users.get(userId));
     }
 }

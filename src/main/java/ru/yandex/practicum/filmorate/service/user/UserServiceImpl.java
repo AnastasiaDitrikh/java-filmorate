@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -62,10 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getListAllFriends(Long userId) {
         User user = getUserById(userId);
-        List<User> listFriends = new ArrayList<>();
-        for (Long id : user.getFriends()) {
-            listFriends.add(getUserById(id));
-        }
+        List<User> listFriends = user.getFriends().stream().map(this::getUserById).collect(Collectors.toList());
         log.info("Список друзей получен");
         return listFriends;
     }

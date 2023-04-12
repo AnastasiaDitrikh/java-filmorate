@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Arrays;
 
 @Slf4j
 @RestControllerAdvice
@@ -18,27 +19,27 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        log.error("Данные не обнаружены.");
+        log.error("Данные не обнаружены." + Arrays.toString(e.getStackTrace()));
         return new ErrorResponse("Данные не обнаружены.", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
-        log.error("Ошибка валидации.");
+        log.error("Ошибка валидации." + Arrays.toString(e.getStackTrace()));
         return new ErrorResponse("Ошибка валидации.", e.getMessage());
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleValidationCountException(final ConstraintViolationException e) {
-        log.error("Ошибка валидации count.");
+        log.error("Ошибка валидации count." + Arrays.toString(e.getStackTrace()));
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowableException(final Throwable e) {
-        log.error("Непредвиденная ошибка.");
+        log.error("Непредвиденная ошибка." + Arrays.toString(e.getStackTrace()));
         return new ErrorResponse("Непредвиденная ошибка.", e.getMessage());
     }
 }
