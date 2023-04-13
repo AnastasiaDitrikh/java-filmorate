@@ -12,8 +12,8 @@ import java.util.*;
 
 public class InMemoryFilmStorage implements FilmStorage {
 
-    protected final Map<Long, Film> films = new HashMap<>();
-    protected Long idFilmGen = 1L;
+    private final Map<Long, Film> films = new HashMap<>();
+    private Long idFilmGen = 1L;
 
 
     @Override

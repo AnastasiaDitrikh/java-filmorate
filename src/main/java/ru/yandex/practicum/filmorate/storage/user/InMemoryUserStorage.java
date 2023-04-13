@@ -11,8 +11,8 @@ import java.util.*;
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
-    protected final Map<Long, User> users = new HashMap<>();
-    protected Long idUserGen = 1L;
+    private final Map<Long, User> users = new HashMap<>();
+    private Long idUserGen = 1L;
 
     @Override
     public List<User> findAll() {
@@ -34,14 +34,11 @@ public class InMemoryUserStorage implements UserStorage {
     public User update(User user) {
         ValidatorUser.validateUser(user);
         if (users.containsKey(user.getId())) {
-            if (users.get(user.getId()).getLogin().equals(user.getLogin())) {
-                users.put(user.getId(), user);
-                log.info("Пользователь с id = {} успешно обновлен", user.getId());
-            } else {
+            if (!users.get(user.getId()).getLogin().equals(user.getLogin())) {
                 checkUserLogin(users, user);
-                users.put(user.getId(), user);
-                log.info("Пользователь с id = {} успешно обновлен", user.getId());
             }
+            users.put(user.getId(), user);
+            log.info("Пользователь с id = {} успешно обновлен", user.getId());
         } else {
             log.warn("Пользователь с id {} не обновлен, т.к. не зарегистрирован", user.getId());
             throw new NotFoundException("Невозможно обновить данные пользователя. Такого пользователя не существует");

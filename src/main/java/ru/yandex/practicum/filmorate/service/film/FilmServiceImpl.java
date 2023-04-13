@@ -6,12 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.user.UserService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 public class FilmServiceImpl implements FilmService {
 
     private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
+    private final UserService userService;
 
     @Override
     public List<Film> findAll() {
@@ -49,7 +48,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public Film addLike(Long filmId, Long userId) {
         Film film = this.getFilmById(filmId);
-        Optional<User> user = userStorage.getUserById(userId);
+        User user = userService.getUserById(userId);
         film.getLikes().add(userId);
         log.info("Like к фильму с id = {} успешно добален", filmId);
         return film;
@@ -74,22 +73,6 @@ public class FilmServiceImpl implements FilmService {
                 .limit(count)
                 .collect(Collectors.toList());
     }
-
-/*    @Override
-    public List<Film> getTheMostPopularMovies(int count) {
-        LikesComparator likesComparator = new LikesComparator();
-        return filmStorage.findAll().stream()
-                .sorted(likesComparator)
-                .limit(count)
-                .collect(Collectors.toList());
-    }
-
-    private static class LikesComparator implements Comparator<Film> {
-        @Override
-        public int compare(Film o1, Film o2) {
-            return o1.getLikes().size() - o2.getLikes().size();
-        }
-    }*/
 }
 
 
