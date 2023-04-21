@@ -1,9 +1,12 @@
 package ru.yandex.practicum.filmorate.storage.h2;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.storage.LikesDao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 
 
@@ -37,7 +40,12 @@ public class LikesH2 implements LikesDao {
 
     @Override
     public Collection<Long> collectLikeByFilmId(Long filmId) {
-        return jdbcTemplate.query(SELECT_LIKES_BY_FILM_ID, (rs, rowNum) -> rs.getLong("user_id"), filmId);
+        return jdbcTemplate.query(SELECT_LIKES_BY_FILM_ID, new RowMapper<Long>() {
+            @Override
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong("user_id");
+            }
+        }, filmId);
     }
 
 }

@@ -15,23 +15,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GenreService {
 
-    private final GenreDao genreDao;
+  private final GenreDao genreDao;
 
 
-    public Collection<Genre> getAllGenres() {
-        return genreDao.getAllGenres();
-    }
+  public Collection<Genre> getAllGenres() {
+    return genreDao.getAllGenres();
+  }
 
-    public Genre getGenreById(Long genreId) {
-        return genreDao
-                .getGenreById(genreId)
-                .orElseThrow(()
-                        -> new NotFoundException("Жанра с id = " + genreId + "нет в базе"));
-    }
+  public Genre getGenreById(Long genreId) {
+    return genreDao
+            .getGenreById(genreId)
+            .orElseThrow(()
+                    -> new NotFoundException("Жанра с id = " + genreId + "нет в базе"));
+  }
 
 
-    public List<Genre> findGenresByFilmId(Long id) {
-        return genreDao.findGenresByFilmId(id);
-    }
+  // TODO по итогу если не используется - удалить
+  public List<Genre> findGenresByFilmId(Long id) {
+    return genreDao.findGenresByFilmId(id);
+  }
 
 }
