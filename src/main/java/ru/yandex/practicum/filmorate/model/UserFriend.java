@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserFriend {
-  private int userId;
-  private int friendId;
-  private final boolean friendStatus = false;
+    private int userId;
+    private int friendId;
 }

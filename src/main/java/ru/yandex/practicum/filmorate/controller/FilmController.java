@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -18,45 +19,45 @@ import java.util.List;
 @Validated
 @RequestMapping("/films")
 public class FilmController {
-  private final FilmService filmService;
+    private final FilmService filmService;
 
 
-  @GetMapping
-  public List<Film> findAll() {
-    return filmService.findAll();
-  }
+    @GetMapping
+    public List<Film> findAll() {
+        return filmService.findAll();
+    }
 
-  @PostMapping
-  public Film add(@Valid @RequestBody Film film) {
-    return filmService.add(film);
-  }
+    @PostMapping
+    public Film add(@Valid @RequestBody Film film) {
+        return filmService.add(film);
+    }
 
-  @PutMapping
-  public Film update(@Valid @RequestBody Film film) {
-    return filmService.update(film);
-  }
+    @PutMapping
+    public Film update(@Valid @RequestBody Film film) {
+        return filmService.update(film);
+    }
 
-  @GetMapping("/{id}")
-  public Film getFilmById(@PathVariable Long id) {
-    return filmService.getFilmById(id);
-  }
-
-
-  @DeleteMapping("{id}/like/{userId}")
-  public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
-    filmService.deleteLike(id, userId);
-  }
+    @GetMapping("/{id}")
+    public Film getFilmById(@PathVariable Long id) {
+        return filmService.getFilmById(id);
+    }
 
 
-  @PutMapping("{id}/like/{userId}")
-  public Film addLikeToFilm(@PathVariable Long id, @PathVariable Long userId) {
-    return filmService.addLike(id, userId);
-  }
+    @DeleteMapping("{id}/like/{userId}")
+    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.deleteLike(id, userId);
+    }
 
 
-  @GetMapping("/popular")
-  public List<Film> getPopular(@RequestParam(defaultValue = "10") @Positive int count) {
-    return filmService.getTheMostPopularMovies(count);
-  }
+    @PutMapping("{id}/like/{userId}")
+    public void addLikeToFilm(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.addLike(id, userId);
+    }
+
+
+    @GetMapping("/popular")
+    public Collection<Film> getPopular(@RequestParam(defaultValue = "10") @Positive int count) {
+        return filmService.getMostPopularMovies(count);
+    }
 
 }

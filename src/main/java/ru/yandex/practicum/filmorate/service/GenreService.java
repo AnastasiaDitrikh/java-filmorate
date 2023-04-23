@@ -8,31 +8,30 @@ import ru.yandex.practicum.filmorate.service.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.GenreDao;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class GenreService {
 
-  private final GenreDao genreDao;
+    private final GenreDao genreDao;
 
 
-  public Collection<Genre> getAllGenres() {
-    return genreDao.getAllGenres();
-  }
+    public Collection<Genre> getAllGenres() {
+        return genreDao.getAllGenres();
+    }
 
-  public Genre getGenreById(Long genreId) {
-    return genreDao
-            .getGenreById(genreId)
-            .orElseThrow(()
-                    -> new NotFoundException("Жанра с id = " + genreId + "нет в базе"));
-  }
+    public Genre getGenreById(Long genreId) {
+        return genreDao
+                .getGenreById(genreId)
+                .orElseThrow(()
+                        -> new NotFoundException("Жанра с id = " + genreId + "нет в базе"));
+    }
 
-
-  // TODO по итогу если не используется - удалить
-  public List<Genre> findGenresByFilmId(Long id) {
-    return genreDao.findGenresByFilmId(id);
-  }
+    public Set<Genre> findGenresByFilmId(Long id) {
+        return new HashSet<>(genreDao.findGenresByFilmId(id));
+    }
 
 }
