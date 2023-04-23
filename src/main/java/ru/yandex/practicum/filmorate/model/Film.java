@@ -30,7 +30,6 @@ public class Film {
 
     @EqualsAndHashCode.Exclude
     @JsonIgnore
-    @Setter
     @Builder.Default
     private Long likes = 0L;
 

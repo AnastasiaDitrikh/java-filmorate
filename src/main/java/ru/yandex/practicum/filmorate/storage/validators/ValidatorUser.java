@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.service.exceptions.ValidationException;
 @UtilityClass
 public class ValidatorUser {
 
-    public static void validateUser(User user) {
+    public void validateUser(User user) {
 
 
         if (user.getLogin().contains(" ")) {

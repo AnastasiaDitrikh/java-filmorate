@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class ValidatorFilm {
     private static final LocalDate THE_FIRST_FILM_REALISE_DATE = LocalDate.of(1895, 12, 28);
 
-    public static void validateFilm(Film film) {
+    public void validateFilm(Film film) {
 
         if (film.getReleaseDate().isBefore(THE_FIRST_FILM_REALISE_DATE)) {
             log.warn("В фильме с id = {} некорректная дата релиза", film.getId());

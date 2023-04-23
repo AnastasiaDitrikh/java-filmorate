@@ -13,6 +13,9 @@ import ru.yandex.practicum.filmorate.storage.h2.mappers.GenreMapper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.function.UnaryOperator.identity;
 
 @Component
 @RequiredArgsConstructor
@@ -75,4 +78,16 @@ public class GenreH2 implements GenreDao {
     public void deleteAllGenresByFilmId(Long filmId) {
         jdbcTemplate.update(SQL_DELETE_FILMS_GENRES_BY_FILM_ID, filmId);
     }
+
+    @Override
+    public void load(List<Film> films) {
+        final Map<Long, Film> filmById = films.stream().collect(Collectors.toMap(Film::getId, identity()));
+        String inSql = String.join(",", Collections.nCopies(films.size(), "?"));
+        final String sqlQuery = "select * from GENRES g, films_genres fg where fg.GENRE_ID = g.ID AND fg.FILM_ID in (" + inSql + ")";
+        jdbcTemplate.query(sqlQuery, (rs) -> {
+            final Film film = filmById.get(rs.getLong("FILM_ID"));
+            film.getGenres().add(genreMapper.mapRow(rs, films.size()));
+        }, films.stream().map(Film::getId).toArray());
+    }
+
 }

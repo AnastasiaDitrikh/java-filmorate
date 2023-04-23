@@ -20,5 +20,7 @@ public interface GenreDao {
 
     void addGenresToFilm(Film film, Set<Genre> listGenre);
 
+    void load(List<Film> films);
+
     void deleteAllGenresByFilmId(Long filmId);
 }

@@ -5,6 +5,5 @@ public interface LikesDao {
 
     void deleteLike(Long filmId, Long userId);
 
-
     Long collectLikeByFilmId(Long filmId);
 }

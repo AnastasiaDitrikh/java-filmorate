@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.UserDao;
+import ru.yandex.practicum.filmorate.storage.validators.ValidatorUser;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,11 +30,13 @@ public class UserService {
 
 
     public User add(User user) {
+        ValidatorUser.validateUser(user);
         return userDao.add(user);
     }
 
 
     public User update(User user) {
+        ValidatorUser.validateUser(user);
         userDao
                 .getUserById(user.getId())
                 .orElseThrow(()

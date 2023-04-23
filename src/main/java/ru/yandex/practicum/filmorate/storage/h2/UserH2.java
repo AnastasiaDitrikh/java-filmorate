@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserDao;
 import ru.yandex.practicum.filmorate.storage.h2.mappers.UserMapper;
-import ru.yandex.practicum.filmorate.storage.validators.ValidatorUser;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -38,7 +37,6 @@ public class UserH2 implements UserDao {
 
     @Override
     public User add(User user) {
-        ValidatorUser.validateUser(user);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_BY_ID, new String[]{"id"});
@@ -55,7 +53,6 @@ public class UserH2 implements UserDao {
 
     @Override
     public User update(User user) {
-        ValidatorUser.validateUser(user);
         jdbcTemplate.update(SQL_UPDATE_BY_ID, user.getEmail(), user.getLogin(),
                 user.getName(), user.getBirthday(), user.getId());
         return user;

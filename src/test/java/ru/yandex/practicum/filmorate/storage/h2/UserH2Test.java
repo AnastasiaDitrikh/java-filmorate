@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import java.util.Optional;
 class UserH2Test {
 
     private final UserH2 userH2;
+    private final UserService userService;
     private User userTest;
 
     @BeforeEach
@@ -60,7 +62,7 @@ class UserH2Test {
         userTest.setName("");
         userTest.setEmail("graphsharikov@gmail.com");
         userTest.setBirthday(LocalDate.of(2002, 3, 28));
-        userH2.update(userTest);
+        userService.update(userTest);
         Optional<User> checkedUser = userH2.getUserById(1L);
         Assertions.assertThat(checkedUser)
                 .isPresent()
