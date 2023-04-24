@@ -5,10 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.film.FilmService;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -49,14 +50,14 @@ public class FilmController {
 
 
     @PutMapping("{id}/like/{userId}")
-    public Film likeFilm(@PathVariable Long id, @PathVariable Long userId) {
-        return filmService.addLike(id, userId);
+    public void addLikeToFilm(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.addLike(id, userId);
     }
 
 
     @GetMapping("/popular")
-    public List<Film> getPopular(@RequestParam(defaultValue = "10") @Positive int count) {
-        return filmService.getTheMostPopularMovies(count);
+    public Collection<Film> getPopular(@RequestParam(defaultValue = "10") @Positive int count) {
+        return filmService.getMostPopularMovies(count);
     }
 
 }
