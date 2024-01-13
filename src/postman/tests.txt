@@ -1,0 +1,2 @@
+По этой ссылке можно найти тесты для проекта, для разных фич
+https://github.com/yandex-praktikum/java-filmorate/blob/add-database/postman/sprint.json
