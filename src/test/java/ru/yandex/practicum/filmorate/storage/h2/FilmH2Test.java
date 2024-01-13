@@ -22,7 +22,6 @@ import java.util.Optional;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class FilmH2Test {
 
-
     private final FilmH2 filmH2;
     private Film testFilm;
 
@@ -37,7 +36,6 @@ class FilmH2Test {
                 .build();
         filmH2.add(testFilm);
     }
-
 
     @Test
     void getFilmById() {
@@ -56,10 +54,7 @@ class FilmH2Test {
                         Assertions.assertThat(film).hasFieldOrPropertyWithValue("duration", 145))
                 .hasValueSatisfying(film ->
                         Assertions.assertThat(film).hasFieldOrPropertyWithValue("mpa", new Mpa(4L, "R")));
-
-
     }
-
 
     @Test
     void updateFilm() {

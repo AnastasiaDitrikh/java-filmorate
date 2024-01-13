@@ -10,22 +10,22 @@ import ru.yandex.practicum.filmorate.storage.MpaDao;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * Класс MpaService предоставляет методы для выполнения операций с рейтингами.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MpaService {
-  private final MpaDao mpaDao;
 
+    private final MpaDao mpaDao;
 
-  public Collection<Mpa> findAllMpa() {
-    return mpaDao.findAllMpa();
-  }
+    public Collection<Mpa> findAllMpa() {
+        return mpaDao.findAllMpa();
+    }
 
-
-  public Optional<Mpa> getMpaById(Long mpaId) {
-    return Optional.ofNullable(mpaDao
-            .getMpaById(mpaId)
-            .orElseThrow(()
-                    -> new NotFoundException("Пользоателя с id = " + mpaId + "нет в базе")));
-  }
+    public Optional<Mpa> getMpaById(Long mpaId) {
+        return Optional.ofNullable(mpaDao.getMpaById(mpaId).orElseThrow(()
+                -> new NotFoundException("Пользоателя с id = " + mpaId + "нет в базе")));
+    }
 }

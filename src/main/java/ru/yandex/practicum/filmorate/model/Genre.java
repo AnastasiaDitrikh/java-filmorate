@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс Genre представляет собой модель жанра.
+ * Используется для хранения информации о жанре.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

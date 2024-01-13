@@ -6,6 +6,9 @@ import ru.yandex.practicum.filmorate.storage.FilmDao;
 import ru.yandex.practicum.filmorate.storage.LikesDao;
 import ru.yandex.practicum.filmorate.storage.UserDao;
 
+/**
+ * Класс LikesService предоставляет методы для выполнения операций с лайками.
+ */
 @Service
 public class LikesService {
     private final LikesDao likeDao;

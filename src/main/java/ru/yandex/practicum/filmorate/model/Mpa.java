@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс Mpa представляет собой модель рейтинга.
+ * Используется для хранения информации о рейтинге.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

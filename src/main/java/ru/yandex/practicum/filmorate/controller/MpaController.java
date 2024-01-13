@@ -11,6 +11,9 @@ import ru.yandex.practicum.filmorate.service.MpaService;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * Класс MpaController является контроллером для обработки HTTP-запросов, связанных с объектами Mpa
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/mpa")

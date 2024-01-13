@@ -24,7 +24,6 @@ class ValidatorUserTest {
                 .build();
     }
 
-
     @Test
     public void loginValidateTest() {
         userTestObject.setLogin("Логин с пробелом");

@@ -32,11 +32,9 @@ class UserH2Test {
                 .login("polsha")
                 .birthday(LocalDate.of(2011, 3, 28))
                 .name("Полиграф")
-
                 .build();
         userH2.add(userTest);
     }
-
 
     @Test
     void getUserById() {
@@ -54,7 +52,6 @@ class UserH2Test {
                 .hasValueSatisfying(user ->
                         Assertions.assertThat(user).hasFieldOrPropertyWithValue("name", "Полиграф"));
     }
-
 
     @Test
     void updateUser() {

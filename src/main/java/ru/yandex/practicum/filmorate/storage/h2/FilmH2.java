@@ -22,12 +22,16 @@ public class FilmH2 implements FilmDao {
     private final JdbcTemplate jdbcTemplate;
     private final FilmMapper filmMapper;
 
-
-    private static final String SQL_FILMS_SELECT_ALL = "select f.*, m.name as mpa_name from films as f  join mpa as m on  f.mpa_id=m.id ";
-    private static final String SQL_FILMS_SELECT_BY_ID = "select f.*, m.name as mpa_name from films as f join mpa as m on  f.mpa_id=m.id where f.id = ?";
+    private static final String SQL_FILMS_SELECT_ALL = "select f.*, m.name as mpa_name " +
+            "from films as f  " +
+            "join mpa as m on  f.mpa_id=m.id ";
+    private static final String SQL_FILMS_SELECT_BY_ID = "select f.*, m.name as mpa_name " +
+            "from films as f " +
+            "join mpa as m on f.mpa_id=m.id where f.id = ?";
     private static final String SQL_INSERT_BY_ID = "insert into films (name, description, release_date,duration, mpa_id) values (?, ?,?,?,?)";
     private static final String SQL_UPDATE_BY_ID = "update films set name = ?, description = ?, release_date = ? ,duration = ?, mpa_id=? where id = ?";
-    public static final String SELECT_POPULAR_FILMS = "SELECT f.*, m.name as mpa_name FROM films as f "
+    public static final String SELECT_POPULAR_FILMS = "SELECT f.*, m.name as mpa_name "
+            + "FROM films as f "
             + "join mpa as m on  f.mpa_id=m.id "
             + "left join  LIKES as l on f.id=l.FILM_ID "
             + "group by f.id order by COUNT(l.USER_ID) desc limit ?";
@@ -37,11 +41,22 @@ public class FilmH2 implements FilmDao {
         this.filmMapper = filmMapper;
     }
 
+    /**
+     * Метод findAll() получает список всех фильмов из базы данных.
+     *
+     * @return список всех фильмов
+     */
     @Override
     public List<Film> findAll() {
         return jdbcTemplate.query(SQL_FILMS_SELECT_ALL, filmMapper);
     }
 
+    /**
+     * Метод add(Film film) добавляет новый фильм в базу данных.
+     *
+     * @param film новый фильм
+     * @return созданный фильм с присвоенным идентификатором
+     */
     @Override
     public Film add(Film film) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -58,7 +73,12 @@ public class FilmH2 implements FilmDao {
         return film;
     }
 
-
+    /**
+     * Метод update(film) обновляет информацию о фильме в базе данных.
+     *
+     * @param film фильм для обновления
+     * @return обновленный фильм
+     */
     @Override
     public Film update(Film film) {
         jdbcTemplate.update(SQL_UPDATE_BY_ID, film.getName(), film.getDescription(),
@@ -66,6 +86,12 @@ public class FilmH2 implements FilmDao {
         return film;
     }
 
+    /**
+     * Метод getFilmById(Long filmId) получает фильм по его идентификатору.
+     *
+     * @param filmId идентификатор фильма
+     * @return объект Optional с фильмом, если он найден, или пустой объект Optional, если фильм не найден
+     */
     @Override
     public Optional<Film> getFilmById(Long filmId) {
         try {
@@ -75,6 +101,12 @@ public class FilmH2 implements FilmDao {
         }
     }
 
+    /**
+     * Метод getMostPopularMovies(int count) получает заданное количество самых популярных фильмов.
+     *
+     * @param count количество фильмов
+     * @return коллекция самых популярных фильмов
+     */
     @Override
     public Collection<Film> getMostPopularMovies(int count) {
         return jdbcTemplate.query(SELECT_POPULAR_FILMS, filmMapper, count);

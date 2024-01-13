@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс UserFriend представляет собой связку пользователей (друзей)
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -11,6 +11,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Класс GenreService предоставляет методы для выполнения операций с жанрами.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -18,20 +21,16 @@ public class GenreService {
 
     private final GenreDao genreDao;
 
-
     public Collection<Genre> getAllGenres() {
         return genreDao.getAllGenres();
     }
 
     public Genre getGenreById(Long genreId) {
-        return genreDao
-                .getGenreById(genreId)
-                .orElseThrow(()
-                        -> new NotFoundException("Жанра с id = " + genreId + "нет в базе"));
+        return genreDao.getGenreById(genreId).orElseThrow(()
+                -> new NotFoundException("Жанра с id = " + genreId + "нет в базе"));
     }
 
     public Set<Genre> findGenresByFilmId(Long id) {
         return new HashSet<>(genreDao.findGenresByFilmId(id));
     }
-
 }

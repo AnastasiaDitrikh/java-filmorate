@@ -11,6 +11,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс Film представляет собой модель фильма.
+ * Используется для хранения информации о фильме.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,13 +22,17 @@ import java.util.List;
 public class Film {
 
     private Long id;
+
     @NotBlank
     private String name;
+
     @NotNull
     @Size(max = 200)
     private String description;
+
     @NotNull
     private LocalDate releaseDate;
+
     @Positive
     private int duration;
 
@@ -35,6 +43,7 @@ public class Film {
 
     @NotNull
     private Mpa mpa;
+
     @Builder.Default
     private List<Genre> genres = new ArrayList<>();
 }

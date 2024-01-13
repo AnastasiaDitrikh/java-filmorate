@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -9,11 +8,15 @@ import ru.yandex.practicum.filmorate.service.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.FilmDao;
 import ru.yandex.practicum.filmorate.storage.GenreDao;
 import ru.yandex.practicum.filmorate.storage.LikesDao;
-import ru.yandex.practicum.filmorate.storage.validators.ValidatorFilm;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ru.yandex.practicum.filmorate.storage.validators.ValidatorFilm.validateFilm;
+
+/**
+ * Класс FilmService предоставляет методы для выполнения операций с фильмами.
+ */
 @Slf4j
 @Service
 public class FilmService {
@@ -37,18 +40,15 @@ public class FilmService {
         return films;
     }
 
-
     public Film getFilmById(Long filmId) {
-        final Film foundedFilm = filmDao
-                .getFilmById(filmId)
-                .orElseThrow(()
-                        -> new NotFoundException("Фильма с id = " + filmId + "нет в базе"));
+        final Film foundedFilm = filmDao.getFilmById(filmId).orElseThrow(()
+                -> new NotFoundException("Фильма с id = " + filmId + "нет в базе"));
         genreDao.load(List.of(foundedFilm));
         return foundedFilm;
     }
 
     public Film add(Film film) {
-        ValidatorFilm.validateFilm(film);
+        validateFilm(film);
         filmDao.add(film);
         if (!film.getGenres().isEmpty() || film.getGenres() != null) {
             Set<Genre> genres = new HashSet<>(film.getGenres());
@@ -58,14 +58,10 @@ public class FilmService {
         return film;
     }
 
-
     public Film update(final Film film) {
-        ValidatorFilm.validateFilm(film);
-        filmDao
-                .getFilmById(film.getId())
-                .orElseThrow(()
-                        -> new NotFoundException("Фильма с id = " + film.getId() + "нет в базе"));
-
+        validateFilm(film);
+        filmDao.getFilmById(film.getId()).orElseThrow(()
+                -> new NotFoundException("Фильма с id = " + film.getId() + "нет в базе"));
 
         final Film updatedFilm = filmDao.update(film);
 
@@ -77,10 +73,8 @@ public class FilmService {
         } else {
             genreDao.deleteAllGenresByFilmId(film.getId());
         }
-
         return updatedFilm;
     }
-
 
     public void addLike(Long filmId, Long userId) {
         likeDao.addLike(filmId, userId);
@@ -92,13 +86,11 @@ public class FilmService {
         likeDao.deleteLike(filmId, userId);
     }
 
-
     public Collection<Film> getMostPopularMovies(int count) {
         List<Film> films = new ArrayList<>(filmDao.getMostPopularMovies(count));
         genreDao.load(films);
         return films;
     }
-
 
     private List<Genre> sortGenres(Set<Genre> genres) {
         return new ArrayList<>(genres).stream()

@@ -30,11 +30,22 @@ public class UserH2 implements UserDao {
         this.userMapper = userMapper;
     }
 
+    /**
+     * Метод findAll возвращает список всех пользователей из базы данных.
+     *
+     * @return список объектов User
+     */
     @Override
     public List<User> findAll() {
         return jdbcTemplate.query(SQL_USERS_SELECT_ALL, userMapper);
     }
 
+    /**
+     * Метод add добавляет нового пользователя в базу данных.
+     *
+     * @param user объект User для добавления
+     * @return объект User, добавленный в базу данных
+     */
     @Override
     public User add(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -50,7 +61,12 @@ public class UserH2 implements UserDao {
         return user;
     }
 
-
+    /**
+     * Метод update обновляет информацию о пользователе в базе данных.
+     *
+     * @param user объект User для обновления
+     * @return объект User, обновленный в базе данных
+     */
     @Override
     public User update(User user) {
         jdbcTemplate.update(SQL_UPDATE_BY_ID, user.getEmail(), user.getLogin(),
@@ -58,6 +74,12 @@ public class UserH2 implements UserDao {
         return user;
     }
 
+    /**
+     * Метод getUserById возвращает пользователя по его ID из базы данных.
+     *
+     * @param userId ID пользователя для извлечения
+     * @return объект Optional, содержащий User, или пустой, если пользователь не найден
+     */
     @Override
     public Optional<User> getUserById(Long userId) {
         try {
